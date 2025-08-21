@@ -8,10 +8,12 @@
 import SwiftUI
 
 @main
-struct CandleViewApp: App {
+struct MemecoinOverlayApp: App {
+    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(viewModel: appDelegate.sharedViewModel)
         }
     }
 }
