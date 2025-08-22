@@ -24,7 +24,8 @@ class OverlayViewModel: ObservableObject {
                 if let lastPrice = self?.currentPair?.priceUsdDouble {
                     let newPoint = PricePoint(
                         time: Date(),
-                        price: lastPrice
+                        price: lastPrice,
+                        marketCap: self?.currentPair?.marketCap ?? 0.0
                     )
                     self?.priceHistory.append(newPoint)
                     
@@ -39,14 +40,15 @@ class OverlayViewModel: ObservableObject {
         dexScreenerService.$currentTokenData
             .receive(on: RunLoop.main)
             .sink { [weak self] tokenData in
-                guard let pair = tokenData?.pairs.first else { return }
+                guard let pair = tokenData?.first else { return }
                 self?.currentPair = pair
                 
                 // If this is the first data point, add it immediately
                 if self?.priceHistory.isEmpty ?? true {
                     let newPoint = PricePoint(
                         time: Date(),
-                        price: pair.priceUsdDouble
+                        price: pair.priceUsdDouble,
+                        marketCap: pair.marketCap ?? 0.0
                     )
                     self?.priceHistory.append(newPoint)
                 }

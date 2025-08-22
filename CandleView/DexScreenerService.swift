@@ -4,7 +4,7 @@ import Combine
 @MainActor
 class DexScreenerService: ObservableObject {
     static let shared = DexScreenerService()
-    private let baseURL = "https://api.dexscreener.com/latest/dex/search"
+    private let baseURL = "https://api.dexscreener.com/tokens/v1"
     
     @Published var currentTokenData: TokenData?
     @Published var error: Error?
@@ -55,7 +55,7 @@ class DexScreenerService: ObservableObject {
     }
     
     private func fetchTokenData(contractAddress: String) async {
-        let urlString = "\(baseURL)?q=\(contractAddress)"
+        let urlString = "\(baseURL)/solana/\(contractAddress)"
         
         guard let url = URL(string: urlString) else {
             self.error = NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
@@ -84,7 +84,7 @@ class DexScreenerService: ObservableObject {
             decoder.keyDecodingStrategy = .useDefaultKeys
             
             let tokenData = try decoder.decode(TokenData.self, from: data)
-            print("Decoded pairs count: \(tokenData.pairs.count)")
+            print("Decoded pairs count: \(tokenData.count)")
             self.currentTokenData = tokenData
             self.error = nil
         } catch let decodingError as DecodingError {

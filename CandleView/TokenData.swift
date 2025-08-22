@@ -1,11 +1,9 @@
 import Foundation
 
-struct TokenData: Codable {
-    let pairs: [PairData]
-}
+typealias TokenData = [PairData]
 
 struct PairData: Codable, Identifiable {
-    let id: String // DexScreener uses pairAddress as unique identifier
+    let labels: [String]?
     let chainId: String
     let dexId: String
     let url: String
@@ -23,14 +21,18 @@ struct PairData: Codable, Identifiable {
     let pairCreatedAt: Int64
     let info: TokenInfo?
     
+    // Conform to Identifiable
+    var id: String { pairAddress }
+    
     private enum CodingKeys: String, CodingKey {
-        case chainId, dexId, url, baseToken, quoteToken
+        case labels, chainId, dexId, url, baseToken, quoteToken
         case priceNative, priceUsd, txns, volume, priceChange
-        case pairAddress, liquidity, fdv, marketCap, pairCreatedAt, info
+        case pairAddress, liquidity, fdv, marketCap, pairCreatedAt, info, boosts
     }
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        labels = try container.decodeIfPresent([String].self, forKey: .labels)
         chainId = try container.decode(String.self, forKey: .chainId)
         dexId = try container.decode(String.self, forKey: .dexId)
         url = try container.decode(String.self, forKey: .url)
@@ -47,7 +49,7 @@ struct PairData: Codable, Identifiable {
         marketCap = try container.decodeIfPresent(Double.self, forKey: .marketCap)
         pairCreatedAt = try container.decode(Int64.self, forKey: .pairCreatedAt)
         info = try container.decodeIfPresent(TokenInfo.self, forKey: .info)
-        id = pairAddress
+        boosts = try container.decodeIfPresent(Boosts.self, forKey: .boosts)
     }
     
     struct Token: Codable {
@@ -57,9 +59,9 @@ struct PairData: Codable, Identifiable {
     }
     
     struct Transactions: Codable {
-        let m5: TransactionData?
-        let h1: TransactionData?
-        let h6: TransactionData?
+        let m5: TransactionData
+        let h1: TransactionData
+        let h6: TransactionData
         let h24: TransactionData
         
         struct TransactionData: Codable {
@@ -70,15 +72,15 @@ struct PairData: Codable, Identifiable {
     
     struct Volume: Codable {
         let h24: Double
-        let h6: Double?
-        let h1: Double?
-        let m5: Double?
+        let h6: Double
+        let h1: Double
+        let m5: Double
     }
     
     struct PriceChange: Codable {
-        let m5: Double?
-        let h1: Double?
-        let h6: Double?
+        let m5: Double
+        let h1: Double
+        let h6: Double
         let h24: Double
     }
     
@@ -105,6 +107,12 @@ struct PairData: Codable, Identifiable {
             let url: String
         }
     }
+    
+    let boosts: Boosts?
+    
+    struct Boosts: Codable {
+        let active: Int
+    }
 }
 
 extension PairData {
@@ -124,13 +132,13 @@ extension PairData {
     var formattedMarketCap: String {
         guard let mcap = marketCap else { return "N/A" }
         if mcap >= 1_000_000_000 {
-            return String(format: "$%.2fB", mcap / 1_000_000_000)
+            return String(format: "$%.1fB", mcap / 1_000_000_000)
         } else if mcap >= 1_000_000 {
-            return String(format: "$%.2fM", mcap / 1_000_000)
+            return String(format: "$%.1fM", mcap / 1_000_000)
         } else if mcap >= 1_000 {
-            return String(format: "$%.2fK", mcap / 1_000)
+            return String(format: "$%.1fK", mcap / 1_000)
         } else {
-            return String(format: "$%.2f", mcap)
+            return String(format: "$%.1f", mcap)
         }
     }
 }

@@ -1,15 +1,16 @@
 # CandleView
 
-A macOS menu bar application for real-time tracking of token prices using the DexScreener API.
+A macOS application for real-time tracking of Solana token market caps and prices using the DexScreener API.
 
 ## Features
 
-- Real-time token price tracking
-- Live price chart with 6-minute history
-- Market cap display
-- 24-hour price change indicators
-- Floating overlay window
-- Automatic 30-second updates
+- Real-time token market cap and price tracking
+- Live chart with dynamic scaling
+- 24h and 1h price change indicators
+- Volume and market cap display
+- Floating overlay window with automatic updates
+- 30-second refresh interval
+- Minimalist dark mode interface
 
 ## Requirements
 
@@ -35,23 +36,44 @@ open CandleView.xcodeproj
 ## Usage
 
 1. Launch the app
-2. Enter a token contract address in the main window
+2. Enter a Solana token contract address in the main window
 3. Click "Track" to start monitoring
-4. The overlay window will show real-time price updates
-5. Double-click the overlay to move it around
+4. The overlay window will display:
+   - Current price
+   - Market cap chart
+   - 24h and 1h price changes
+   - Market cap value
+5. The chart automatically scales to show price movements clearly
+6. Data refreshes every 30 seconds automatically
 
 ## Architecture
 
 - SwiftUI for the user interface
 - Combine for reactive data handling
 - MVVM architecture pattern
+- Async/await for network operations
 - DexScreener API integration
 
 ## API Reference
 
 The app uses the DexScreener API for token data:
-- Base URL: `https://api.dexscreener.com/latest/dex/search`
-- Documentation: [DexScreener API](https://docs.dexscreener.com/api/reference)
+- Base URL: `https://api.dexscreener.com/tokens/v1`
+- Endpoint: `/solana/{tokenAddress}`
+- Example: `https://api.dexscreener.com/tokens/v1/solana/G7yFuzP3WyUY3VdgMDo27dAYSBD5gqxwaARPczzmpump`
+
+## Features in Detail
+
+### Chart
+- Dynamic Y-axis scaling for better visibility of price movements
+- Automatic range adjustment with 5% padding
+- Grid lines for easy value reading
+- Current value indicator line
+
+### Market Data
+- Real-time price updates
+- Market cap tracking
+- 24h and 1h price change indicators
+- Color-coded positive/negative changes
 
 ## Contributing
 
