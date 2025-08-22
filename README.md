@@ -2,6 +2,8 @@
 
 A macOS application for real-time tracking of Solana token market caps and prices using the DexScreener API.
 
+<img width="1680" height="1047" alt="Screenshot 2025-08-22 at 10 48 08 am" src="https://github.com/user-attachments/assets/b69196f8-1b01-44f9-a661-fcb3d663091c" />
+
 ## Features
 
 - Real-time token market cap and price tracking
