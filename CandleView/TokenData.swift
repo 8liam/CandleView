@@ -71,17 +71,24 @@ struct PairData: Codable, Identifiable {
     }
     
     struct Volume: Codable {
-        let h24: Double
-        let h6: Double
-        let h1: Double
-        let m5: Double
+        let h24: Double?
+        let h6: Double?
+        let h1: Double?
+        let m5: Double?
+        
+        // Default to 0 if value is missing
+        var h24Value: Double { h24 ?? 0 }
     }
     
     struct PriceChange: Codable {
-        let m5: Double
-        let h1: Double
-        let h6: Double
-        let h24: Double
+        let m5: Double?
+        let h1: Double?
+        let h6: Double?
+        let h24: Double?
+        
+        // Default to 0 if value is missing
+        var h24Value: Double { h24 ?? 0 }
+        var h1Value: Double { h1 ?? 0 }
     }
     
     struct Liquidity: Codable {

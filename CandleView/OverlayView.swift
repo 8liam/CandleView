@@ -114,16 +114,16 @@ struct OverlayView: View {
             if let pair = viewModel.currentPair {
                 VStack(spacing: 4) {
                     HStack {
-                        Text("24h: \(String(format: "%.1f%%", pair.priceChange.h24))")
-                            .foregroundColor(pair.priceChange.h24 >= 0 ? .green : .red)
-                        Spacer()
-                        Text("1h: \(String(format: "%.1f%%", pair.priceChange.h1))")
-                            .foregroundColor(pair.priceChange.h1 >= 0 ? .green : .red)
+                                            Text("24h: \(String(format: "%.1f%%", pair.priceChange.h24Value))")
+                        .foregroundColor(pair.priceChange.h24Value >= 0 ? .green : .red)
+                    Spacer()
+                    Text("1h: \(String(format: "%.1f%%", pair.priceChange.h1Value))")
+                        .foregroundColor(pair.priceChange.h1Value >= 0 ? .green : .red)
                     }
                     HStack {
                         Text("MCAP: \(pair.formattedMarketCap)")
                         Spacer()
-                        Text("VOL: $\(String(format: "%.1fK", pair.volume.h24 / 1000))")
+                        Text("VOL: $\(String(format: "%.1fK", pair.volume.h24Value / 1000))")
                     }
                     .foregroundColor(.secondary)
                 }
